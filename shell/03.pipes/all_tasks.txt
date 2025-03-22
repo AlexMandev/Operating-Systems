@@ -93,7 +93,6 @@ df -P > ~/df-P-output.txt
 cat ~/df-P-output.txt | tail -n +2 | tr -s ' ' | sort -t ' ' -k 2,2 -n
 
 
-
 03-a-3100.txt
 Запазете само потребителските имена от /etc/passwd във файл users във вашата home директория.
 
@@ -113,12 +112,26 @@ cat /etc/passwd | cut -d ':' -f 1 | tr '[a-z]' '[A-Z]'
 03-a-5000.txt
 Изведете реда от /etc/passwd, на който има информация за вашия потребител.
 
+Solution:
+grep $(id -un) /etc/passwd
+
 
 Изведедете този ред и двата реда преди него.
 
+Solution:
+grep $(id -un) -B 2 /etc/passwd 
+
+
 Изведете този ред, двата преди него, и трите след него.
 
+Solution:
+grep $(id -un) -B 2 -A 3 /etc/passwd
+
+
 Изведете *само* реда, който се намира 2 реда преди реда, съдържащ информация за вашия потребител.
+
+Solution:
+grep $(id -un) -B 2 /etc/passwd | head -n 1
 
 
 03-a-5001.txt
@@ -126,17 +139,34 @@ cat /etc/passwd | cut -d ':' -f 1 | tr '[a-z]' '[A-Z]'
 
 (hint: 'man 5 passwd' за информация какъв е форматът на /etc/passwd)
 
+Solution:
+grep -v '/bin/bash' /etc/passwd | wc -l
+
 
 03-a-5002.txt
 Изведете само имената на хората с второ име по-дълго от 6 (>6) символа според /etc/passwd
+
+Solution:
+cut /etc/passwd -d : -f 5 | grep --color -E "[^ ]+ [^ ,]{7,}" | cut -d , -f1
+
 
 
 03-a-5003.txt
 Изведете имената на хората с второ име по-късо от 8 (<=7) символа според /etc/passwd // !(>7) = ?
 
+Solution:
+cut /etc/passwd -d : -f 5 | cut -d , -f1 | grep -E "^[^ ]+ [^ ,]{1,7}$"
+
+
 
 03-a-5004.txt
 Изведете целите редове от /etc/passwd за хората от 03-a-5003
+
+Solution:
+??????
+
+
+
 
 
 03-a-6000.txt
@@ -173,14 +203,23 @@ grep $(id -un) /etc/passwd | cut -d ':' -f 4
 03-b-3400.txt
 Колко коментара има във файла /etc/services ? Коментарите се маркират със символа #, след който всеки символ на реда се счита за коментар.
 
+Solution:
+grep "#" /etc/services -c
 
 
 03-b-3500.txt
 Колко файлове в /bin са 'shell script'-oве? (Колко файлове в дадена директория са ASCII text?)
 
+Solution:
+може би със grep "#!/bin/bash" или с командата file, ако я вземем
+
+
 
 03-b-3600.txt
 Направете списък с директориите на вашата файлова система, до които нямате достъп. Понеже файловата система може да е много голяма, търсете до 3 нива на дълбочина.
+
+Solution:
+
 
 
 03-b-4000.txt
