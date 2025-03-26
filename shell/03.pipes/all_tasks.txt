@@ -174,24 +174,43 @@ Solution:
 Посредством awk, използвайки копирания файл за входнни данни, изведете:
 
 - общия брой редове
+awk 'BEGIN {all = 0} {all+=1} END {print all}' emp.data
+OR
+awk 'END {print $NR}' emp.data
 - третия ред
+awk 'NR == 3' emp.data
 - последното поле от всеки ред
+awk '{print $NF}' emp.data
 - последното поле на последния ред
+awk 'END {print $NF}' emp.data
 - всеки ред, който има повече от 4 полета
+awk 'NF > 4' emp.data
 - всеки ред, чието последно поле е по-голямо от 4
+awk '$NF > 4' emp.data
 - общия брой полета във всички редове
+awk 'BEGIN {all = 0} {all += NF} END {print all}' emp.data
 - броя редове, в които се среща низът Beth
+awk 'BEGIN {lines = 0} /Beth/ {lines += 1} END {print lines}' emp.data
 - най-голямото трето поле и редът, който го съдържа
+awk '$3 > max {max = $3; row = $0} END {print "Max value: " max, "\nRow: " row}' emp.data
 - всеки ред, който има поне едно поле
+awk 'NF > 0' emp.data
 - всеки ред, който има повече от 17 знака
+awk 'length($0) > 17' emp.data
 - броя на полетата във всеки ред и самият ред
+awk '{print $0, " Number of fields: ", NF }' emp.data
 - първите две полета от всеки ред, с разменени места
+awk '{print $2, $1}' emp.data
 - всеки ред така, че първите две полета да са с разменени места
+awk '{temp = $1; $1 = $2; $2 = temp; print $0}' emp.data
 - всеки ред така, че на мястото на първото поле да има номер на реда
+awk '{$1 = NR; print $0}' emp.data
 - всеки ред без второто поле
+awk '{$2 = ""; print $0}' emp.data | tr -s ' '
 - за всеки ред, сумата от второ и трето поле
+awk '{print $2 + $3}' emp.data
 - сумата на второ и трето поле от всеки ред
-
+awk '{sum += $2 + $3} END {print sum}' emp.data
 
 03-b-0300.txt
 Намерете само Group ID-то си от файлa /etc/passwd.
@@ -388,6 +407,9 @@ grep -F '/home/SI' mypasswd.txt | cut -d: -f1 | grep -E '^s' | sort > si.txt
 03-b-8500.txt
 За всяка група от /etc/group изпишете "Hello, <група>", като ако това е вашата група, напишете "Hello, <група> - I am here!".
 
+Solution:
+cut /etc/group -d: -f1 | awk -v g=$(id -gn) '{if($0 == g) {print "Hello ", g, " - I am here!"} else {print "Hello " $0, "!" }}'
+
 
 03-b-8600.txt
 Shell Script-овете са файлове, които по конвенция имат разширение .sh. Всеки
@@ -435,6 +457,9 @@ cp /srv/fmi-os/exercises/data/population.csv .
 03-b-9051.txt
 Използвайки файл population.csv, намерете колко е общото население на света
 през 2008 година. А през 2016?
+cat population.csv | rev | cut -d, -f1,2 | rev | tail -n +2 | grep -E '^2008,' | awk -F ',' '{sum += $2} END {print sum}'
+cat population.csv | rev | cut -d, -f1,2 | rev | tail -n +2 | grep -E '^2016,' | awk -F ',' '{sum += $2} END {print sum}'
+
 
 
 03-b-9052.txt
@@ -451,7 +476,6 @@ grep -Ei 'bulgaria' population.csv | sort -t ',' -k 4 -r | head -n 1 | cut -d, -
 Solution:
 tail population.csv -n +2 | grep -E ',2016,' | sed -E 's/("[^,]*),/\1|/' | sort -t ',' -k 4 -nr | head -n 1 | sed 's/|/,/'
 tail population.csv -n +2 | grep -E ',2016,' | sed -E 's/("[^,]*),/\1|/' | sort -t ',' -k 4 -n | head -n 1 | sed 's/|/,/'
-
 
 
 03-b-9054.txt
@@ -566,6 +590,7 @@ this\ is"really"not\allowed@example.com
 - всеки ред, като полетата са в обратен ред
 
 (Разгледайте for цикли в awk)
+awk '{for(i=NF; i>0; i--) {printf $i; printf " "}; print ""}' emp.data
 
 
 03-b-9500.txt
