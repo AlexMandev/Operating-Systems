@@ -1,0 +1,4 @@
+Зад. 5 2017-SE-01 Намерете имената на топ 5 файловете в текущата директория с най-много hardlinks.
+
+find . -maxdepth 1 -type f -printf '%n %P\n' | sort -nr | head -n 5
+ez
