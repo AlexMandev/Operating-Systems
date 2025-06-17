@@ -2,10 +2,6 @@
 #include <unistd.h>
 #include <err.h>
 
-// run cat with <file>
-// pipe cat to sort
-// sort output should go to stdout
-
 int main(int argc, char* argv[]) {
 	if(argc != 2) {
         errx(1, "bad args");
