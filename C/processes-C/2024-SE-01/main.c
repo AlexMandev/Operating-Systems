@@ -52,8 +52,8 @@ int main(int argc, char* argv[]) {
             dup2(pfd[0], 0);
             close(pfd[0]);
 
-            execlp(argv[1], argv[1], (char*)NULL);
-            err(6, "couldn't execlp");
+            execl(argv[1], argv[1], (char*)NULL);
+            err(6, "couldn't execl");
         }
         
         close(pfd[0]);
